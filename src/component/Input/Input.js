@@ -24,7 +24,7 @@ export default class Input extends React.Component{
     if(this.state.val.trim() === ""){
       return;
     }
-    this.props.addName(this.state.val);
+    this.props.addItem(this.state.val);
     this.setState(() =>{
       return{
         val : ""

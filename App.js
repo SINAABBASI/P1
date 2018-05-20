@@ -54,7 +54,7 @@ export default class App extends Component{
     AsyncStorage.setItem('state',JSON.stringify(this.state))
   }
 
-  addName = (val) => {
+  addItem = (val) => {
     this.setState(prevState => {
       return{
         lists : prevState.lists.concat({
@@ -85,18 +85,20 @@ export default class App extends Component{
       }
     })
   }
+
+  closedItem = () => {
+    this.setState({
+      selectedItem : null,
+    });
+  }
   render() {
     return (
       <View style={styles.container}> 
         <ItemDetails 
         selectedItem = {this.state.selectedItem} 
         deletedItem = {this.deletedItem}
-        closedItem = {() => {
-          this.setState({
-            selectedItem : null,
-          });
-        }} />
-        <Input addName = {this.addName} />
+        closedItem = {this.closedItem} />
+        <Input addItem = {this.addItem} />
         <List lists = {this.state.lists} selectedItem ={this.selectedItem} />
       </View> 
     );
