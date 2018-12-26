@@ -6,100 +6,39 @@
 
 import React, { Component } from 'react';
 import {
-  Platform,
   StyleSheet,
-  Text,
   View,
-  Button,
-  TextInput,
   AsyncStorage
 } from 'react-native';
 
-import ListItem from './src/component/ListItem/ListItem';
 import Input from './src/component/Input/Input';
 import List from './src/component/ListItem/List';
-import img from './src/assets/Sina.png';
 import ItemDetails from './src/component/ItemDetails/ItemDetails';
+import {connect} from 'react-redux'
+import { addItem, deleteItem, selectItem, deselectItem } from './src/store/actions/items';
 
-export default class App extends Component{
-  constructor(){
-    super();
-    
-  } 
-  state = {
-    lists : [],
-    selectedItem : null,
-  }
-  componentWillMount(){
-    AsyncStorage.getItem('state')
-    .then((saveState) => {
-      console.log('state loaded');      
-      if(saveState === null){
-        this.setState({
-          lists : [],
-          selectedItem : null
-        })
-      }else{
-        this.setState(JSON.parse(saveState));
-      }
-    }).catch((error) =>{
-      console.log('state not loaded');
-    })
-  }
-  componentWillUnmount(){
-    this.saveState();
-  }
-
-  saveState(){
-    AsyncStorage.setItem('state',JSON.stringify(this.state))
-  }
-
+class App extends Component{
   addItem = (val) => {
-    this.setState(prevState => {
-      return{
-        lists : prevState.lists.concat({
-          key : Math.random().toString(),
-          value : val,
-          image : img
-        })
-      };          
-    })
+    this.props.onAddItem(val)
   }
   selectedItem = (key) => {
-    
-    this.setState(prevState => {
-      return{
-        selectedItem : prevState.lists.find(item => {
-          return item.key === key;
-        })
-      }
-    })
+    this.props.onSelectItem(key)
   }
   deletedItem = () =>{
-    this.setState(prevState => {
-      return {
-        lists : prevState.lists.filter((item) => {
-          return item.key !== prevState.selectedItem.key; 
-        }),
-        selectedItem : null
-      }
-    })
+    this.props.onDeleteItem()
   }
-
   closedItem = () => {
-    this.setState({
-      selectedItem : null,
-    });
+    this.props.onDeselectItem()
   }
   render() {
     return (
       <View style={styles.container}> 
         <ItemDetails 
-        selectedItem = {this.state.selectedItem} 
+        selectedItem = {this.props.selectedItem} 
         deletedItem = {this.deletedItem}
         closedItem = {this.closedItem} />
         <Input addItem = {this.addItem} />
-        <List lists = {this.state.lists} selectedItem ={this.selectedItem} />
+        <List lists = {this.props.lists} selectedItem ={this.selectedItem} />
       </View> 
     );
   }
@@ -115,3 +54,20 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5FCFF',
   }
 });
+const mapStateToProps = (state) => {
+  return {
+    lists: state.lists_part.lists,
+    selectedItem: state.lists_part.selectedItem
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onAddItem: name => dispatch(addItem(name)),
+    onDeleteItem: () => dispatch(deleteItem()),
+    onSelectItem: key => dispatch(selectItem(key)),
+    onDeselectItem: () => dispatch(deselectItem())
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

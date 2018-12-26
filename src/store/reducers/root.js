@@ -13,15 +13,15 @@ const reducer = (state = initiallState , action) => {
         lists : state.lists.concat({
           key : Math.random().toString(),
           value : action.itemName,
-          image : img
+          image : require('./../../assets/Sina.png')
         })
       };
     }
     case DELETE_ITEM :{
       return{
         ...state,
-        lists : prevState.lists.filter((item) => {
-          return item.key !== prevState.selectedItem.key; 
+        lists : state.lists.filter((item) => {
+          return item.key !== state.selectedItem.key; 
         }),
         selectedItem : null
       }
@@ -29,7 +29,7 @@ const reducer = (state = initiallState , action) => {
     case SELECT_ITEM :{
       return{
         ...state,
-        selectedItem : prevState.lists.find(item => {
+        selectedItem : state.lists.find(item => {
           return item.key === action.key;
         })
       }
@@ -41,7 +41,7 @@ const reducer = (state = initiallState , action) => {
       }
     }
     default:
-      return;
+      return state;
   }
 };
 export default reducer;
