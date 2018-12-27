@@ -1,1 +1,1 @@
-import {addItem,deleteItem,deselectItem,selectItem} from './items'
+import {addItem,deleteItem} from './items'

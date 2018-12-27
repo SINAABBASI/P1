@@ -1,73 +1,35 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
+import {Navigation} from 'react-native-navigation'
+import AuthScreen from './src/screens/Auth'
+import  FindItem from "./src/screens/FindItem";
+import  shareItem from "./src/screens/shareItem";
 
-import React, { Component } from 'react';
-import {
-  StyleSheet,
-  View,
-  AsyncStorage
-} from 'react-native';
+import { Provider } from 'react-redux';
+import configStore from './src/store/configStore';
 
-import Input from './src/component/Input/Input';
-import List from './src/component/ListItem/List';
-import ItemDetails from './src/component/ItemDetails/ItemDetails';
-import {connect} from 'react-redux'
-import { addItem, deleteItem, selectItem, deselectItem } from './src/store/actions/items';
+const store = configStore();
 
-class App extends Component{
-  addItem = (val) => {
-    this.props.onAddItem(val)
-  }
-  selectedItem = (key) => {
-    this.props.onSelectItem(key)
-  }
-  deletedItem = () =>{
-    this.props.onDeleteItem()
-  }
-  closedItem = () => {
-    this.props.onDeselectItem()
-  }
-  render() {
-    return (
-      <View style={styles.container}> 
-        <ItemDetails 
-        selectedItem = {this.props.selectedItem} 
-        deletedItem = {this.deletedItem}
-        closedItem = {this.closedItem} />
-        <Input addItem = {this.addItem} />
-        <List lists = {this.props.lists} selectedItem ={this.selectedItem} />
-      </View> 
-    );
-  }
-}
+Navigation.registerComponentWithRedux('P1.AuthScreen',() => AuthScreen,Provider,store);
+Navigation.registerComponentWithRedux('P1.FindItem',() => FindItem,Provider,store);
+Navigation.registerComponentWithRedux('P1.shareItem',() => shareItem,Provider,store);
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding :26, 
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+Navigation.setRoot({
+  root: {
+    stack: {
+      children: [{
+        component: {
+          name: 'P1.AuthScreen',
+          passProps: {
+            text: 'stack with one child'
+          }
+        }
+      }],
+      options: {
+        topBar: {
+          title: {
+            text: 'Login'
+          }
+        }
+      }
+    }
   }
 });
-const mapStateToProps = (state) => {
-  return {
-    lists: state.lists_part.lists,
-    selectedItem: state.lists_part.selectedItem
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    onAddItem: name => dispatch(addItem(name)),
-    onDeleteItem: () => dispatch(deleteItem()),
-    onSelectItem: key => dispatch(selectItem(key)),
-    onDeselectItem: () => dispatch(deselectItem())
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -1,8 +1,7 @@
-import {ADD_ITEM,DELETE_ITEM,DESELECT_ITEM,SELECT_ITEM} from '../actions/actionTypes'
+import {ADD_ITEM,DELETE_ITEM} from '../actions/actionTypes'
 
 const initiallState = {
-  lists : [],
-  selectedItem : null,
+  lists : []
 };
 
 const reducer = (state = initiallState , action) => {
@@ -22,22 +21,7 @@ const reducer = (state = initiallState , action) => {
         ...state,
         lists : state.lists.filter((item) => {
           return item.key !== state.selectedItem.key; 
-        }),
-        selectedItem : null
-      }
-    }
-    case SELECT_ITEM :{
-      return{
-        ...state,
-        selectedItem : state.lists.find(item => {
-          return item.key === action.key;
         })
-      }
-    }
-    case DESELECT_ITEM :{
-      return{
-        ...state,
-        selectedItem : null,
       }
     }
     default:
