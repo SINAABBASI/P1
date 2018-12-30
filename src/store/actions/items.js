@@ -5,9 +5,10 @@ export const addItem = (itemName) => {
         itemName : itemName
     }
 }
-export const deleteItem = () => {
+export const deleteItem = (itemKey) => {
     return{
         type : DELETE_ITEM,
+        itemKey : itemKey
     }
 }
 

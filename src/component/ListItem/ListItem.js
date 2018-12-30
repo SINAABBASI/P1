@@ -6,12 +6,13 @@ import {
   TouchableOpacity,
   Image
 } from 'react-native';
+import debounce from  'lodash.debounce'
 
 export default class Listitem extends Component{
     
   render(){
     return(
-      <TouchableOpacity onPress={this.props.itemPressed}>
+      <TouchableOpacity onPress={debounce(this.props.itemPressed, 300, { leading: true, trailing: false })}>
         <View style = {styles.listitem}>
           <Image resizeMode ={"contain" }source = {this.props.image} style = {styles.img}/>
           <Text>

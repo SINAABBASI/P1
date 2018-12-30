@@ -20,7 +20,7 @@ const reducer = (state = initiallState , action) => {
       return{
         ...state,
         lists : state.lists.filter((item) => {
-          return item.key !== state.selectedItem.key; 
+          return item.key !== action.itemKey; 
         })
       }
     }
